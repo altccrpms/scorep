@@ -23,10 +23,6 @@ Requires:       papi
 
 %global with_mpich 1
 %global with_openmpi 1
-%if 0%{?rhel}
-# No mpich in EL
-%global with_mpich 0
-%endif
 %ifarch s390 s390x
 # No openmpi on s390(x)
 %global with_openmpi 0
@@ -129,7 +125,7 @@ for mpi in %{mpi_list}
 do
   mkdir $mpi
   cd $mpi
-%if 0%{?rhel}
+%if 0%{?el6}
   module load $mpi-%{_arch}
 %else
   module load mpi/$mpi-%{_arch}
@@ -157,7 +153,7 @@ chrpath -d %{buildroot}%{_libdir}/*.so.*
 
 for mpi in %{mpi_list}
 do
-%if 0%{?rhel}
+%if 0%{?el6}
   module load $mpi-%{_arch}
 %else
   module load mpi/$mpi-%{_arch}
