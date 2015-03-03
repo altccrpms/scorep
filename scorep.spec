@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -112,6 +112,8 @@ rm -rf vendor/{opari2,otf2}
 %build
 %global _configure ../configure
 %global configure_opts --enable-shared --disable-static --disable-silent-rules
+
+cp /usr/lib/rpm/redhat/config.{sub,guess} build-config/
 
 # Build serial version
 mkdir serial
@@ -226,6 +228,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Mon Jan 19 2015 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 1.3-3
+- update gnu-config files to build on aarch64
+
 * Sat Dec 13 2014 Orion Poplawski <orion@cora.nwra.com> - 1.3-2
 - Use %%license
 
