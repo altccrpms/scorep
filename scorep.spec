@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -228,6 +228,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Wed Mar 04 2015 Orion Poplawski <orion@cora.nwra.com> - 1.3-4
+- Rebuild for papi
+
 * Mon Jan 19 2015 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 1.3-3
 - update gnu-config files to build on aarch64
 
