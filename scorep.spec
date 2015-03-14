@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -228,6 +228,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Fri Mar 13 2015 Orion Poplawski <orion@cora.nwra.com> - 1.3-5
+- Rebuild for mpich 3.1.4 soname change
+
 * Wed Mar 04 2015 Orion Poplawski <orion@cora.nwra.com> - 1.3-4
 - Rebuild for papi
 
