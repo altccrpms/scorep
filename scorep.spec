@@ -27,6 +27,12 @@ Requires:       papi
 # No openmpi on s390(x)
 %global with_openmpi 0
 %endif
+# No mpich on EL6 ppc64
+%ifarch ppc64
+%if 0%{?rhel} && 0%{?rhel} <= 6
+%global with_mpich 0
+%endif
+%endif
 
 %if %{with_mpich}
 %global mpi_list mpich
