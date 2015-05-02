@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -234,6 +234,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 1.3-6
+- Rebuilt for GCC 5 C++11 ABI change
+
 * Fri Mar 13 2015 Orion Poplawski <orion@cora.nwra.com> - 1.3-5
 - Rebuild for mpich 3.1.4 soname change
 
