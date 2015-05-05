@@ -1,6 +1,6 @@
 Name:           scorep
-Version:        1.3
-Release:        7%{?dist}
+Version:        1.4
+Release:        1%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -11,15 +11,15 @@ BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  binutils-devel
 BuildRequires:  chrpath
-BuildRequires:  cube-devel
+BuildRequires:  cube-devel >= 4.3
 BuildRequires:  opari2
 BuildRequires:  otf2-devel >= 1.4
 BuildRequires:  papi-devel
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-Requires:       binutils-devel
-Requires:       cube-devel
-Requires:       otf2-devel >= 1.4
-Requires:       papi
+Requires:       binutils-devel%{?_isa}
+Requires:       cube-devel%{?_isa} >= 4.3
+Requires:       otf2-devel%{?_isa} >= 1.5
+Requires:       papi%{?_isa}
 
 %global with_mpich 1
 %global with_openmpi 1
@@ -66,7 +66,7 @@ Score-P runtime libraries.
 %package mpich
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes for mpich
 Requires:       %{name}-mpich-libs%{?_isa} = %{version}-%{release}
-Requires:       mpich
+Requires:       mpich%{?_isa}
 BuildRequires:  mpich-devel
 
 %description mpich
@@ -90,7 +90,7 @@ Score-P mpich runtime libraries.
 %package openmpi
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes for openmpi
 Requires:       %{name}-openmpi-libs%{?_isa} = %{version}-%{release}
-Requires:       openmpi
+Requires:       openmpi%{?_isa}
 BuildRequires:  openmpi-devel
 
 %description openmpi
@@ -234,6 +234,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Tue May 5 2015 Orion Poplawski <orion@cora.nwra.com> - 1.4-1
+- Update to 1.4
+
 * Sun May  3 2015 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.3-7
 - Rebuild for changed mpich
 
