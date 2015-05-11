@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.4.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -19,7 +19,7 @@ Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       binutils-devel%{?_isa}
 Requires:       cube-devel%{?_isa} >= 4.3
 Requires:       otf2-devel%{?_isa} >= 1.5
-Requires:       papi%{?_isa}
+Requires:       papi-devel%{?_isa}
 
 %global with_mpich 1
 %global with_openmpi 1
@@ -65,9 +65,12 @@ Score-P runtime libraries.
 %if %{with_mpich}
 %package mpich
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes for mpich
+BuildRequires:  mpich-devel
 Requires:       %{name}-mpich-libs%{?_isa} = %{version}-%{release}
 Requires:       mpich%{?_isa}
-BuildRequires:  mpich-devel
+Requires:       cube-devel%{?_isa} >= 4.3
+Requires:       otf2-devel%{?_isa} >= 1.5
+Requires:       papi-devel%{?_isa}
 
 %description mpich
 The Score-P (Scalable Performance Measurement Infrastructure for
@@ -89,9 +92,12 @@ Score-P mpich runtime libraries.
 %if %{with_openmpi}
 %package openmpi
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes for openmpi
+BuildRequires:  openmpi-devel
 Requires:       %{name}-openmpi-libs%{?_isa} = %{version}-%{release}
 Requires:       openmpi%{?_isa}
-BuildRequires:  openmpi-devel
+Requires:       cube-devel%{?_isa} >= 4.3
+Requires:       otf2-devel%{?_isa} >= 1.5
+Requires:       papi-devel%{?_isa}
 
 %description openmpi
 The Score-P (Scalable Performance Measurement Infrastructure for
@@ -234,6 +240,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Mon May 11 2015 Orion Poplawski <orion@cora.nwra.com> - 1.4.1-2
+- Require papi-devel, add requires to mpi packages
+
 * Fri May 8 2015 Orion Poplawski <orion@cora.nwra.com> - 1.4.1-1
 - Update to 1.4.1
 
