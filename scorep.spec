@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -67,7 +67,6 @@ Score-P runtime libraries.
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes for mpich
 BuildRequires:  mpich-devel
 Requires:       %{name}-mpich-libs%{?_isa} = %{version}-%{release}
-Requires:       mpich%{?_isa}
 Requires:       cube-devel%{?_isa} >= 4.3
 Requires:       otf2-devel%{?_isa} >= 1.5
 Requires:       papi-devel%{?_isa}
@@ -94,7 +93,6 @@ Score-P mpich runtime libraries.
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes for openmpi
 BuildRequires:  openmpi-devel
 Requires:       %{name}-openmpi-libs%{?_isa} = %{version}-%{release}
-Requires:       openmpi%{?_isa}
 Requires:       cube-devel%{?_isa} >= 4.3
 Requires:       otf2-devel%{?_isa} >= 1.5
 Requires:       papi-devel%{?_isa}
@@ -240,6 +238,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Sun Jul 26 2015 Sandro Mani <manisandro@gmail.com> - 1.4.2-2
+- Rebuild for RPM MPI Requires Provides Change
+
 * Fri Jun 19 2015 Orion Poplawski <orion@cora.nwra.com> - 1.4.2-1
 - Update to 1.4.2
 
