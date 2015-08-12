@@ -6,6 +6,8 @@ Summary:        Scalable Performance Measurement Infrastructure for Parallel Cod
 License:        BSD
 URL:            http://www.vi-hps.org/projects/score-p/
 Source0:        http://www.vi-hps.org/upload/packages/%{name}/%{name}-%{version}.tar.gz
+# Fix getaddrinfo() feature test
+Patch0:         scorep-getaddrinfo.patch
 BuildRequires:  gcc-gfortran
 BuildRequires:  bison
 BuildRequires:  flex
@@ -115,6 +117,7 @@ Score-P openmpi runtime libraries.
 
 %prep
 %setup -q
+%patch0 -p1 -b .getaddrinfo
 # Bundled libs in vendor/
 rm -rf vendor/{opari2,otf2}
 
@@ -238,6 +241,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Wed Aug 12 2015 Orion Poplawski <orion@cora.nwra.com> - 1.4.2-3
+- Add patch to handle glibc 2.22 change to getaddrinfo() exposure
+
 * Sun Jul 26 2015 Sandro Mani <manisandro@gmail.com> - 1.4.2-2
 - Rebuild for RPM MPI Requires Provides Change
 

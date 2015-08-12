@@ -1,0 +1,90 @@
+diff -up scorep-1.4.2/build-backend/configure.getaddrinfo scorep-1.4.2/build-backend/configure
+--- scorep-1.4.2/build-backend/configure.getaddrinfo	2015-06-15 13:55:31.370240851 -0600
++++ scorep-1.4.2/build-backend/configure	2015-08-12 10:00:19.528631559 -0600
+@@ -37552,7 +37552,7 @@ fi
+  ;; #(
+   *) :
+     ac_fn_c_check_decl "$LINENO" "getaddrinfo" "ac_cv_have_decl_getaddrinfo" "
+-	    #define _POSIX_SOURCE
++	    #define _POSIX_C_SOURCE 200112L
+ 		#include <sys/types.h>
+ 		#include <sys/socket.h>
+ 		#include <netdb.h>
+diff -up scorep-1.4.2/build-backend/Makefile.in.getaddrinfo scorep-1.4.2/build-backend/Makefile.in
+--- scorep-1.4.2/build-backend/Makefile.in.getaddrinfo	2015-06-15 13:55:35.898183114 -0600
++++ scorep-1.4.2/build-backend/Makefile.in	2015-08-12 10:14:16.958271043 -0600
+@@ -859,7 +859,7 @@ XFAIL_TESTS =
+ @CROSS_BUILD_TRUE@am__append_131 = libscorep_online_access_mockup.la \
+ @CROSS_BUILD_TRUE@	libscorep_online_access_spp.la
+ @CROSS_BUILD_TRUE@@HAVE_ONLINE_ACCESS_TRUE@am__append_132 = scorep_oa_scanner.h
+-@CROSS_BUILD_TRUE@@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_133 = -D_POSIX_SOURCE
++@CROSS_BUILD_TRUE@@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_133 = -D_POSIX_C_SOURCE=200112L
+ @BUILD_SHARED_LIBRARIES_TRUE@@CROSS_BUILD_TRUE@@HAVE_GNU_LINKER_TRUE@am__append_134 = -Wl,--no-as-needed
+ @CROSS_BUILD_TRUE@@HAVE_CUDA_SUPPORT_TRUE@am__append_135 = libscorep_adapter_cuda_mgmt.la
+ @CROSS_BUILD_TRUE@@HAVE_MPI_SUPPORT_TRUE@am__append_136 = libscorep_mpi_event.la \
+@@ -1598,7 +1598,7 @@ XFAIL_TESTS =
+ @CROSS_BUILD_FALSE@am__append_347 = libscorep_online_access_mockup.la \
+ @CROSS_BUILD_FALSE@	libscorep_online_access_spp.la
+ @CROSS_BUILD_FALSE@@HAVE_ONLINE_ACCESS_TRUE@am__append_348 = scorep_oa_scanner.h
+-@CROSS_BUILD_FALSE@@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_349 = -D_POSIX_SOURCE
++@CROSS_BUILD_FALSE@@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_349 = -D_POSIX_C_SOURCE=200112L
+ @BUILD_SHARED_LIBRARIES_TRUE@@CROSS_BUILD_FALSE@@HAVE_GNU_LINKER_TRUE@am__append_350 = -Wl,--no-as-needed
+ @CROSS_BUILD_FALSE@@HAVE_CUDA_SUPPORT_TRUE@am__append_351 = libscorep_adapter_cuda_mgmt.la
+ @CROSS_BUILD_FALSE@@HAVE_MPI_SUPPORT_TRUE@am__append_352 = libscorep_mpi_event.la \
+@@ -1977,7 +1977,7 @@ XFAIL_TESTS =
+ # scorep-config-mic by install-hook rule
+ @CROSS_BUILD_FALSE@@PLATFORM_MIC_TRUE@am__append_438 = scorep-config
+ @CROSS_BUILD_FALSE@@HAVE_ONLINE_ACCESS_TRUE@am__append_439 = online-access-registry
+-@CROSS_BUILD_FALSE@@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_440 = -D_POSIX_SOURCE
++@CROSS_BUILD_FALSE@@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_440 = -D_POSIX_C_SOURCE=200112L
+ @CROSS_BUILD_FALSE@@HAVE_ONLINE_ACCESS_TRUE@am__append_441 = $(SRC_ROOT)tools/oa_registry/scenario_mpi \
+ @CROSS_BUILD_FALSE@@HAVE_ONLINE_ACCESS_TRUE@	$(SRC_ROOT)tools/oa_registry/scenario_serial
+ # component separation will provide the HAVE_OPARI2 conditional
+diff -up scorep-1.4.2/build-frontend/configure.getaddrinfo scorep-1.4.2/build-frontend/configure
+--- scorep-1.4.2/build-frontend/configure.getaddrinfo	2015-06-15 13:55:41.050117421 -0600
++++ scorep-1.4.2/build-frontend/configure	2015-08-12 10:01:04.275397505 -0600
+@@ -18492,7 +18492,7 @@ fi
+  ;; #(
+   *) :
+     ac_fn_c_check_decl "$LINENO" "getaddrinfo" "ac_cv_have_decl_getaddrinfo" "
+-	    #define _POSIX_SOURCE
++	    #define _POSIX_C_SOURCE 200112L
+ 		#include <sys/types.h>
+ 		#include <sys/socket.h>
+ 		#include <netdb.h>
+diff -up scorep-1.4.2/build-frontend/Makefile.in.getaddrinfo scorep-1.4.2/build-frontend/Makefile.in
+--- scorep-1.4.2/build-frontend/Makefile.in.getaddrinfo	2015-06-15 13:55:42.158103293 -0600
++++ scorep-1.4.2/build-frontend/Makefile.in	2015-08-12 10:12:46.332740871 -0600
+@@ -134,7 +134,7 @@ XFAIL_TESTS =
+ # scorep-config-mic by install-hook rule
+ @PLATFORM_MIC_TRUE@am__append_5 = scorep-config
+ @HAVE_ONLINE_ACCESS_TRUE@am__append_6 = online-access-registry
+-@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_7 = -D_POSIX_SOURCE
++@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_7 = -D_POSIX_C_SOURCE=200112L
+ @HAVE_ONLINE_ACCESS_TRUE@am__append_8 = $(SRC_ROOT)tools/oa_registry/scenario_mpi \
+ @HAVE_ONLINE_ACCESS_TRUE@	$(SRC_ROOT)tools/oa_registry/scenario_serial
+ subdir = .
+diff -up scorep-1.4.2/build-mpi/configure.getaddrinfo scorep-1.4.2/build-mpi/configure
+--- scorep-1.4.2/build-mpi/configure.getaddrinfo	2015-06-15 13:55:49.234013068 -0600
++++ scorep-1.4.2/build-mpi/configure	2015-08-12 10:00:42.586510952 -0600
+@@ -40342,7 +40342,7 @@ fi
+  ;; #(
+   *) :
+     ac_fn_c_check_decl "$LINENO" "getaddrinfo" "ac_cv_have_decl_getaddrinfo" "
+-	    #define _POSIX_SOURCE
++	    #define _POSIX_C_SOURCE 200112L
+ 		#include <sys/types.h>
+ 		#include <sys/socket.h>
+ 		#include <netdb.h>
+diff -up scorep-1.4.2/build-mpi/Makefile.in.getaddrinfo scorep-1.4.2/build-mpi/Makefile.in
+--- scorep-1.4.2/build-mpi/Makefile.in.getaddrinfo	2015-06-15 13:55:50.705994299 -0600
++++ scorep-1.4.2/build-mpi/Makefile.in	2015-08-12 10:13:13.733598817 -0600
+@@ -127,7 +127,7 @@ XFAIL_TESTS =
+ @HAVE_MPI_SUPPORT_TRUE@	libscorep_ipc_mpi.la
+ @HAVE_MPI_SUPPORT_TRUE@@HAVE_SCOREP_EXTERNAL_OTF2_FALSE@am__append_3 = otf2_speed_test
+ @HAVE_MPI_SUPPORT_TRUE@@HAVE_ONLINE_ACCESS_TRUE@am__append_4 = scorep_oa_scanner.h
+-@HAVE_MPI_SUPPORT_TRUE@@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_5 = -D_POSIX_SOURCE
++@HAVE_MPI_SUPPORT_TRUE@@HAVE_ONLINE_ACCESS_TRUE@@PLATFORM_AIX_FALSE@am__append_5 = -D_POSIX_C_SOURCE=200112L
+ @BUILD_SHARED_LIBRARIES_TRUE@@HAVE_GNU_LINKER_TRUE@am__append_6 = -Wl,--no-as-needed
+ 
+ # see 'Linking issues with PGI compilers and Open MPI 1.8' #951
