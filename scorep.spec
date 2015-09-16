@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.4.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -241,6 +241,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Wed Sep 16 2015 Orion Poplawski <orion@cora.nwra.com> - 1.4.2-3
+- Rebuild for openmpi 1.10.0
+
 * Wed Aug 12 2015 Orion Poplawski <orion@cora.nwra.com> - 1.4.2-3
 - Add patch to handle glibc 2.22 change to getaddrinfo() exposure
 
