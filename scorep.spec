@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.4.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -241,6 +241,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.4.2-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Wed Jan 27 2016 Orion Poplawski <orion@cora.nwra.com> - 1.4.2-4
 - Rebuild for papi 5.4.3
 
