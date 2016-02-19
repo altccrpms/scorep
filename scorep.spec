@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        1.4.2
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -124,7 +124,13 @@ rm -rf vendor/{opari2,otf2}
 
 %build
 %global _configure ../configure
-%global configure_opts --enable-shared --disable-static --disable-silent-rules
+# required for gcc6
+export CXXFLAGS=-std=gnu++98
+# The messging with linkage paths here and below is due to the mess of
+# the papi package there.  %%_libdir/libpapi.so is papi v4 with a
+# soname of libpapi.so (bz #1300664).
+export LDFLAGS='-Wl,--as-needed -L%{_libdir}/papi-5.1.1/usr/lib'
+%global configure_opts --enable-shared --disable-static --disable-silent-rules %{?el6:--with-papi-header=%{_libdir}/papi-5.1.1%{_includedir} --with-papi-lib=%{_libdir}/papi-5.1.1/usr/lib}
 
 cp /usr/lib/rpm/redhat/config.{sub,guess} build-config/
 
@@ -132,6 +138,7 @@ cp /usr/lib/rpm/redhat/config.{sub,guess} build-config/
 mkdir serial
 cd serial
 %configure %{configure_opts} --without-mpi --without-shmem
+find -name Makefile -exec sed -r -i 's,-L%{_libdir}/?( |$),,g;s,-L/usr/lib/../%{_lib} ,,g' {} \;
 make %{?_smp_mflags}
 cd -
 
@@ -152,6 +159,7 @@ do
     --sbindir=%{_libdir}/$mpi/sbin \
     --includedir=%{_includedir}/$mpi-%{_arch} \
     --mandir=%{_libdir}/$mpi/share/man
+  find -name Makefile -exec sed -r -i 's,-L%{_libdir}/?( |$),,g;s,-L/usr/lib/../%{_lib} ,,g' {} \;
   make %{?_smp_mflags}
   module purge
   cd -
@@ -211,7 +219,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %if %{with_mpich}
 %files mpich
 %license COPYING
-%doc AUTHORS ChangeLog README THANKS
+%doc AUTHORS ChangeLog README THANKS OPEN_ISSUES
 %{_libdir}/mpich/bin/online-access-registry
 %{_libdir}/mpich/bin/scorep
 %{_libdir}/mpich/bin/scorep-backend-info
@@ -227,7 +235,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %if %{with_openmpi}
 %files openmpi
 %license COPYING
-%doc AUTHORS ChangeLog README THANKS
+%doc AUTHORS ChangeLog README THANKS OPEN_ISSUES
 %{_libdir}/openmpi/bin/online-access-registry
 %{_libdir}/openmpi/bin/scorep
 %{_libdir}/openmpi/bin/scorep-backend-info
@@ -241,6 +249,12 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Fri Feb 19 2016 Dave Love <loveshack@fedoraproject.org> - 1.4.2-6
+- Link against papi-5.1.1 on el6
+- Link --as-needed (see previous rpmlint warnings)
+- Install OPEN_ISSUES as doc
+- Use -std=gnu++98 for gcc6
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.4.2-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
