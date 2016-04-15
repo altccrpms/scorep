@@ -1,13 +1,11 @@
 Name:           scorep
-Version:        1.4.2
-Release:        6%{?dist}
+Version:        2.0.1
+Release:        1%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
 URL:            http://www.vi-hps.org/projects/score-p/
 Source0:        http://www.vi-hps.org/upload/packages/%{name}/%{name}-%{version}.tar.gz
-# Fix getaddrinfo() feature test
-Patch0:         scorep-getaddrinfo.patch
 BuildRequires:  gcc-gfortran
 BuildRequires:  bison
 BuildRequires:  flex
@@ -15,12 +13,12 @@ BuildRequires:  binutils-devel
 BuildRequires:  chrpath
 BuildRequires:  cube-devel >= 4.3
 BuildRequires:  opari2
-BuildRequires:  otf2-devel >= 1.4
+BuildRequires:  otf2-devel >= 2.0
 BuildRequires:  papi-devel
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       binutils-devel%{?_isa}
 Requires:       cube-devel%{?_isa} >= 4.3
-Requires:       otf2-devel%{?_isa} >= 1.5
+Requires:       otf2-devel%{?_isa} >= 2.0
 Requires:       papi-devel%{?_isa}
 
 %global with_mpich 1
@@ -117,7 +115,6 @@ Score-P openmpi runtime libraries.
 
 %prep
 %setup -q
-%patch0 -p1 -b .getaddrinfo
 # Bundled libs in vendor/
 rm -rf vendor/{opari2,otf2}
 
@@ -200,12 +197,16 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_defaultdocdir}/scorep/ChangeLog
 %{_defaultdocdir}/scorep/README
 %{_defaultdocdir}/scorep/THANKS
-%{_bindir}/online-access-registry
 %{_bindir}/scorep
 %{_bindir}/scorep-backend-info
 %{_bindir}/scorep-config
+%{_bindir}/scorep-g++
+%{_bindir}/scorep-gcc
+%{_bindir}/scorep-gfortran
 %{_bindir}/scorep-info
 %{_bindir}/scorep-score
+%{_bindir}/scorep-wrapper
+%{_libdir}/scorep/
 %{_datadir}/scorep/
 %{_includedir}/scorep/
 
@@ -220,12 +221,20 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files mpich
 %license COPYING
 %doc AUTHORS ChangeLog README THANKS OPEN_ISSUES
-%{_libdir}/mpich/bin/online-access-registry
 %{_libdir}/mpich/bin/scorep
 %{_libdir}/mpich/bin/scorep-backend-info
 %{_libdir}/mpich/bin/scorep-config
+%{_libdir}/mpich/bin/scorep-g++
+%{_libdir}/mpich/bin/scorep-gcc
+%{_libdir}/mpich/bin/scorep-gfortran
 %{_libdir}/mpich/bin/scorep-info
+%{_libdir}/mpich/bin/scorep-mpicc
+%{_libdir}/mpich/bin/scorep-mpicxx
+%{_libdir}/mpich/bin/scorep-mpif77
+%{_libdir}/mpich/bin/scorep-mpif90
 %{_libdir}/mpich/bin/scorep-score
+%{_libdir}/mpich/bin/scorep-wrapper
+%{_libdir}/mpich/lib/scorep/
 %{_includedir}/mpich-%{_arch}/scorep/
 
 %files mpich-libs
@@ -236,12 +245,22 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files openmpi
 %license COPYING
 %doc AUTHORS ChangeLog README THANKS OPEN_ISSUES
-%{_libdir}/openmpi/bin/online-access-registry
 %{_libdir}/openmpi/bin/scorep
 %{_libdir}/openmpi/bin/scorep-backend-info
 %{_libdir}/openmpi/bin/scorep-config
+%{_libdir}/openmpi/bin/scorep-g++
+%{_libdir}/openmpi/bin/scorep-gcc
+%{_libdir}/openmpi/bin/scorep-gfortran
 %{_libdir}/openmpi/bin/scorep-info
+%{_libdir}/openmpi/bin/scorep-mpicc
+%{_libdir}/openmpi/bin/scorep-mpicxx
+%{_libdir}/openmpi/bin/scorep-mpif77
+%{_libdir}/openmpi/bin/scorep-mpif90
+%{_libdir}/openmpi/bin/scorep-oshcc
+%{_libdir}/openmpi/bin/scorep-oshfort
 %{_libdir}/openmpi/bin/scorep-score
+%{_libdir}/openmpi/bin/scorep-wrapper
+%{_libdir}/openmpi/lib/scorep/
 %{_includedir}/openmpi-%{_arch}/scorep/
 
 %files openmpi-libs
@@ -249,6 +268,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Fri Apr 15 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.1-1
+- Update to 2.0.1
+
 * Fri Feb 19 2016 Dave Love <loveshack@fedoraproject.org> - 1.4.2-6
 - Link against papi-5.1.1 on el6
 - Link --as-needed (see previous rpmlint warnings)
