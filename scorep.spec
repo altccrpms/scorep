@@ -1,47 +1,36 @@
-Name:           scorep
-Version:        1.4.2
+%global shortname scorep
+%global ver 1.4.2
+%{?altcc_init}
+
+Name:           %{shortname}%{?altcc_pkg_suffix}
+Version:        %{ver}
 Release:        6%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
 URL:            http://www.vi-hps.org/projects/score-p/
-Source0:        http://www.vi-hps.org/upload/packages/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://www.vi-hps.org/upload/packages/%{shortname}/%{shortname}-%{version}.tar.gz
+Source1:        %{shortname}.module.in
 # Fix getaddrinfo() feature test
 Patch0:         scorep-getaddrinfo.patch
-BuildRequires:  gcc-gfortran
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  binutils-devel
 BuildRequires:  chrpath
-BuildRequires:  cube-devel >= 4.3
+# Just use internal cube
+BuildRequires:  cube%{?altcc_cc_dep_suffix}-devel >= 4.3
 BuildRequires:  opari2
 BuildRequires:  otf2-devel >= 1.4
 BuildRequires:  papi-devel
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       binutils-devel%{?_isa}
-Requires:       cube-devel%{?_isa} >= 4.3
+# Just use internal cube
+Requires:       cube%{?altcc_cc_dep_suffix}-devel%{?_isa} >= 4.3
 Requires:       otf2-devel%{?_isa} >= 1.5
 Requires:       papi-devel%{?_isa}
+%?altcc_reqmodules
+%?altcc_provide
 
-%global with_mpich 1
-%global with_openmpi 1
-%ifarch s390 s390x
-# No openmpi on s390(x)
-%global with_openmpi 0
-%endif
-# No mpich on EL6 ppc64
-%ifarch ppc64
-%if 0%{?rhel} && 0%{?rhel} <= 6
-%global with_mpich 0
-%endif
-%endif
-
-%if %{with_mpich}
-%global mpi_list mpich
-%endif
-%if %{with_openmpi}
-%global mpi_list %{?mpi_list} openmpi
-%endif
 
 %description
 The Score-P (Scalable Performance Measurement Infrastructure for
@@ -53,6 +42,7 @@ online analysis of HPC applications.
 %package        doc
 Summary:        Documentation for %{name}
 BuildArch:      noarch
+%{?altcc:%altcc_provide doc}
 
 %description    doc
 The %{name}-doc package contains documentation for %{name}
@@ -60,140 +50,48 @@ The %{name}-doc package contains documentation for %{name}
 
 %package libs
 Summary:        Score-P runtime libraries
+%{?altcc:%altcc_provide libs}
 
 %description libs
 Score-P runtime libraries.
 
-%if %{with_mpich}
-%package mpich
-Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes for mpich
-BuildRequires:  mpich-devel
-Requires:       %{name}-mpich-libs%{?_isa} = %{version}-%{release}
-Requires:       cube-devel%{?_isa} >= 4.3
-Requires:       otf2-devel%{?_isa} >= 1.5
-Requires:       papi-devel%{?_isa}
-
-%description mpich
-The Score-P (Scalable Performance Measurement Infrastructure for
-Parallel Codes) measurement infrastructure is a highly scalable and
-easy-to-use tool suite for profiling, event trace recording, and
-online analysis of HPC applications.
-
-This package was compiled with mpich.
-
-
-%package mpich-libs
-Summary:        Score-P mpich runtime libraries
-
-%description mpich-libs
-Score-P mpich runtime libraries.
-%endif
-
-
-%if %{with_openmpi}
-%package openmpi
-Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes for openmpi
-BuildRequires:  openmpi-devel
-Requires:       %{name}-openmpi-libs%{?_isa} = %{version}-%{release}
-Requires:       cube-devel%{?_isa} >= 4.3
-Requires:       otf2-devel%{?_isa} >= 1.5
-Requires:       papi-devel%{?_isa}
-
-%description openmpi
-The Score-P (Scalable Performance Measurement Infrastructure for
-Parallel Codes) measurement infrastructure is a highly scalable and
-easy-to-use tool suite for profiling, event trace recording, and
-online analysis of HPC applications.
-
-This package was compiled with openmpi.
-
-%package openmpi-libs
-Summary:        Score-P openmpi runtime libraries
-
-%description openmpi-libs
-Score-P openmpi runtime libraries.
-%endif
-
 
 %prep
-%setup -q
+%setup -q -n %{shortname}-%{version}
 %patch0 -p1 -b .getaddrinfo
 # Bundled libs in vendor/
 rm -rf vendor/{opari2,otf2}
 
 
 %build
-%global _configure ../configure
-# required for gcc6
-export CXXFLAGS=-std=gnu++98
-# The messging with linkage paths here and below is due to the mess of
-# the papi package there.  %%_libdir/libpapi.so is papi v4 with a
-# soname of libpapi.so (bz #1300664).
-export LDFLAGS='-Wl,--as-needed -L%{_libdir}/papi-5.1.1/usr/lib'
-%global configure_opts --enable-shared --disable-static --disable-silent-rules %{?el6:--with-papi-header=%{_libdir}/papi-5.1.1%{_includedir} --with-papi-lib=%{_libdir}/papi-5.1.1/usr/lib}
+%global configure_opts --enable-shared --disable-static --disable-silent-rules
+%{?altcc:%global configure_opts %{configure_opts} --with-nocross-compiler-suite=%{altcc_cc_name}}
+%if !0%{?altcc_with_mpi}
+%global configure_opts  %{configure_opts} --without-mpi --without-shmem
+%endif
+%{?altcc:ml cube}
 
 cp /usr/lib/rpm/redhat/config.{sub,guess} build-config/
-
-# Build serial version
-mkdir serial
-cd serial
-%configure %{configure_opts} --without-mpi --without-shmem
-find -name Makefile -exec sed -r -i 's,-L%{_libdir}/?( |$),,g;s,-L/usr/lib/../%{_lib} ,,g' {} \;
+unset CFLAGS CXXFLAGS
+%configure %{configure_opts}
+find -name Makefile -exec sed -r -i 's,-L/usr/%{_lib}/?( |$),,g;s,-L/usr/lib/../%{_lib} ,,g' {} \;
 make %{?_smp_mflags}
-cd -
-
-# Build MPI versions
-for mpi in %{mpi_list}
-do
-  mkdir $mpi
-  cd $mpi
-%if 0%{?el6}
-  module load $mpi-%{_arch}
-%else
-  module load mpi/$mpi-%{_arch}
-%endif
-  ln -s ../configure .
-  %configure %{configure_opts} \
-    --libdir=%{_libdir}/$mpi/lib \
-    --bindir=%{_libdir}/$mpi/bin \
-    --sbindir=%{_libdir}/$mpi/sbin \
-    --includedir=%{_includedir}/$mpi-%{_arch} \
-    --mandir=%{_libdir}/$mpi/share/man
-  find -name Makefile -exec sed -r -i 's,-L%{_libdir}/?( |$),,g;s,-L/usr/lib/../%{_lib} ,,g' {} \;
-  make %{?_smp_mflags}
-  module purge
-  cd -
-done
 
 
 %install
-%make_install -C serial
+%make_install
 # Install doc
 cp -p AUTHORS ChangeLog README THANKS \
       %{buildroot}%{_defaultdocdir}/scorep/
-# Strip rpath
-chrpath -d %{buildroot}%{_libdir}/*.so.*
-
-for mpi in %{mpi_list}
-do
-%if 0%{?el6}
-  module load $mpi-%{_arch}
-%else
-  module load mpi/$mpi-%{_arch}
-%endif
-  %make_install -C $mpi
-  module purge
-done
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-
-%post libs -p /sbin/ldconfig
-
-%postun libs -p /sbin/ldconfig
+%{?altcc:%altcc_doc}
+%{?altcc:%altcc_license}
+%{?altcc:%altcc_writemodule %SOURCE1}
 
 
 %files
-%{!?_licensedir:%global license %%doc}
+%{?altcc:%altcc_files -dl %{_bindir} %{_includedir}}
 %license COPYING
 %dir %{_defaultdocdir}/scorep
 %{_defaultdocdir}/scorep/AUTHORS
@@ -213,40 +111,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_defaultdocdir}/scorep/
 
 %files libs
+%{?altcc:%altcc_files -lm %{_libdir}}
 %license COPYING
-%{_libdir}/libscorep_*.so*
+%{_libdir}/lib*.so*
 
-%if %{with_mpich}
-%files mpich
-%license COPYING
-%doc AUTHORS ChangeLog README THANKS OPEN_ISSUES
-%{_libdir}/mpich/bin/online-access-registry
-%{_libdir}/mpich/bin/scorep
-%{_libdir}/mpich/bin/scorep-backend-info
-%{_libdir}/mpich/bin/scorep-config
-%{_libdir}/mpich/bin/scorep-info
-%{_libdir}/mpich/bin/scorep-score
-%{_includedir}/mpich-%{_arch}/scorep/
-
-%files mpich-libs
-%{_libdir}/mpich/lib/*.so*
-%endif
-
-%if %{with_openmpi}
-%files openmpi
-%license COPYING
-%doc AUTHORS ChangeLog README THANKS OPEN_ISSUES
-%{_libdir}/openmpi/bin/online-access-registry
-%{_libdir}/openmpi/bin/scorep
-%{_libdir}/openmpi/bin/scorep-backend-info
-%{_libdir}/openmpi/bin/scorep-config
-%{_libdir}/openmpi/bin/scorep-info
-%{_libdir}/openmpi/bin/scorep-score
-%{_includedir}/openmpi-%{_arch}/scorep/
-
-%files openmpi-libs
-%{_libdir}/openmpi/lib/*.so*
-%endif
 
 %changelog
 * Fri Feb 19 2016 Dave Love <loveshack@fedoraproject.org> - 1.4.2-6

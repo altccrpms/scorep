@@ -1,0 +1,12 @@
+#%Module 1.0
+#
+#  scorep environment module
+#
+conflict	scorep
+prepend-path 	PATH 		@PREFIX@/bin
+prepend-path	MANPATH		@PREFIX@/share/man
+prepend-path 	LD_LIBRARY_PATH @PREFIX@/@LIB@
+setenv		SCOREP_DIR	@PREFIX@
+setenv		SCOREP_HOME	@PREFIX@
+setenv		SCOREP_INCLUDE	@PREFIX@/include
+setenv		SCOREP_LIB	@PREFIX@/@LIB@
