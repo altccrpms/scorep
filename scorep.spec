@@ -1,5 +1,5 @@
 Name:           scorep
-Version:        2.0.1
+Version:        2.0.2
 Release:        1%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
@@ -268,6 +268,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Tue May 24 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.2-1
+- Update to 2.0.2
+
 * Fri Apr 15 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.1-1
 - Update to 2.0.1
 
