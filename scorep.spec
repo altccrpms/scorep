@@ -1,32 +1,32 @@
 %global shortname scorep
-%global ver 1.4.2
+%global ver 2.0.2
 %{?altcc_init}
 
 Name:           %{shortname}%{?altcc_pkg_suffix}
 Version:        %{ver}
-Release:        6%{?dist}
+Release:        1%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
 URL:            http://www.vi-hps.org/projects/score-p/
 Source0:        http://www.vi-hps.org/upload/packages/%{shortname}/%{shortname}-%{version}.tar.gz
 Source1:        %{shortname}.module.in
-# Fix getaddrinfo() feature test
-Patch0:         scorep-getaddrinfo.patch
+%if !0%{?altcc}
+BuildRequires:  gcc-gfortran
+%endif
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  binutils-devel
 BuildRequires:  chrpath
 # Just use internal cube
 BuildRequires:  cube%{?altcc_cc_dep_suffix}-devel >= 4.3
-BuildRequires:  opari2
-BuildRequires:  otf2-devel >= 1.4
+BuildRequires:  opari2%{?altcc_cc_dep_suffix}
+BuildRequires:  otf2%{?altcc_cc_dep_suffix}-devel >= 2.0
 BuildRequires:  papi-devel
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       binutils-devel%{?_isa}
-# Just use internal cube
 Requires:       cube%{?altcc_cc_dep_suffix}-devel%{?_isa} >= 4.3
-Requires:       otf2-devel%{?_isa} >= 1.5
+Requires:       otf2%{?altcc_cc_dep_suffix}-devel%{?_isa} >= 2.0
 Requires:       papi-devel%{?_isa}
 %?altcc_reqmodules
 %?altcc_provide
@@ -58,7 +58,6 @@ Score-P runtime libraries.
 
 %prep
 %setup -q -n %{shortname}-%{version}
-%patch0 -p1 -b .getaddrinfo
 # Bundled libs in vendor/
 rm -rf vendor/{opari2,otf2}
 
@@ -69,7 +68,7 @@ rm -rf vendor/{opari2,otf2}
 %if !0%{?altcc_with_mpi}
 %global configure_opts  %{configure_opts} --without-mpi --without-shmem
 %endif
-%{?altcc:ml cube}
+%{?altcc:ml cube opari2 otf2}
 
 cp /usr/lib/rpm/redhat/config.{sub,guess} build-config/
 unset CFLAGS CXXFLAGS
@@ -98,12 +97,34 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_defaultdocdir}/scorep/ChangeLog
 %{_defaultdocdir}/scorep/README
 %{_defaultdocdir}/scorep/THANKS
-%{_bindir}/online-access-registry
 %{_bindir}/scorep
 %{_bindir}/scorep-backend-info
 %{_bindir}/scorep-config
+%if !0%{?altcc}
+%{_bindir}/scorep-g++
+%{_bindir}/scorep-gcc
+%{_bindir}/scorep-gfortran
+%endif
+%if "%{?altcc_cc_name}" == "intel"
+%{_bindir}/scorep-icc
+%{_bindir}/scorep-icpc
+%{_bindir}/scorep-ifort
+%endif
+%if 0%{?altcc_with_mpi}
+%{_bindir}/scorep-mpicc
+%{_bindir}/scorep-mpicxx
+%{_bindir}/scorep-mpif77
+%{_bindir}/scorep-mpif90
+%{_bindir}/scorep-online-access-registry
+%if "%{?altcc_mpi_name}" == "openmpi"
+%{_bindir}/scorep-oshcc
+%{_bindir}/scorep-oshfort
+%endif
+%endif
 %{_bindir}/scorep-info
 %{_bindir}/scorep-score
+%{_bindir}/scorep-wrapper
+%{_libdir}/scorep/
 %{_datadir}/scorep/
 %{_includedir}/scorep/
 
@@ -117,6 +138,12 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Tue May 24 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.2-1
+- Update to 2.0.2
+
+* Fri Apr 15 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.1-1
+- Update to 2.0.1
+
 * Fri Feb 19 2016 Dave Love <loveshack@fedoraproject.org> - 1.4.2-6
 - Link against papi-5.1.1 on el6
 - Link --as-needed (see previous rpmlint warnings)
