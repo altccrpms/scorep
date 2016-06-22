@@ -1,11 +1,11 @@
 Name:           scorep
-Version:        2.0.2
-Release:        1%{?dist}
+Version:        3.0
+Release:        0.1.rc1%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
 URL:            http://www.vi-hps.org/projects/score-p/
-Source0:        http://www.vi-hps.org/upload/packages/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://www.vi-hps.org/upload/packages/%{name}/%{name}-%{version}-rc1.tar.gz
 BuildRequires:  gcc-gfortran
 BuildRequires:  bison
 BuildRequires:  flex
@@ -114,7 +114,7 @@ Score-P openmpi runtime libraries.
 
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}-rc1
 # Bundled libs in vendor/
 rm -rf vendor/{opari2,otf2}
 
