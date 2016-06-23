@@ -1,15 +1,15 @@
 %global shortname scorep
-%global ver 2.0.2
+%global ver 3.0
 %{?altcc_init}
 
 Name:           %{shortname}%{?altcc_pkg_suffix}
 Version:        %{ver}
-Release:        1%{?dist}
+Release:        0.1.rc1%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
 URL:            http://www.vi-hps.org/projects/score-p/
-Source0:        http://www.vi-hps.org/upload/packages/%{shortname}/%{shortname}-%{version}.tar.gz
+Source0:        http://www.vi-hps.org/upload/packages/%{shortname}/%{shortname}-%{version}-rc1.tar.gz
 Source1:        %{shortname}.module.in
 %if !0%{?altcc}
 BuildRequires:  gcc-gfortran
@@ -57,7 +57,7 @@ Score-P runtime libraries.
 
 
 %prep
-%setup -q -n %{shortname}-%{version}
+%setup -q -n %{shortname}-%{version}-rc1
 # Bundled libs in vendor/
 rm -rf vendor/{opari2,otf2}
 
