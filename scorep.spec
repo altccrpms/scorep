@@ -127,7 +127,7 @@ export CXXFLAGS=-std=gnu++98
 # the papi package there.  %%_libdir/libpapi.so is papi v4 with a
 # soname of libpapi.so (bz #1300664).
 export LDFLAGS='-Wl,--as-needed -L%{_libdir}/papi-5.1.1/usr/lib'
-%global configure_opts --enable-shared --disable-static --disable-silent-rules %{?el6:--with-papi-header=%{_libdir}/papi-5.1.1%{_includedir} --with-papi-lib=%{_libdir}/papi-5.1.1/usr/lib}
+%global configure_opts ac_scorep_platform=linux --enable-shared --disable-static --disable-silent-rules %{?el6:--with-papi-header=%{_libdir}/papi-5.1.1%{_includedir} --with-papi-lib=%{_libdir}/papi-5.1.1/usr/lib}
 
 cp /usr/lib/rpm/redhat/config.{sub,guess} build-config/
 
@@ -270,6 +270,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %changelog
 * Thu Sep 15 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.2-2
 - Rebuild for papi 5.5.0
+- Force scorep_platform to be "linux"
 
 * Tue May 24 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.2-1
 - Update to 2.0.2
