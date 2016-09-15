@@ -1,6 +1,6 @@
 Name:           scorep
 Version:        2.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -268,6 +268,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+* Thu Sep 15 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.2-2
+- Rebuild for papi 5.5.0
+
 * Tue May 24 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.2-1
 - Update to 2.0.2
 
