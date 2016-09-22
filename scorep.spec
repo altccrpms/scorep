@@ -115,11 +115,11 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_bindir}/scorep-mpicxx
 %{_bindir}/scorep-mpif77
 %{_bindir}/scorep-mpif90
+%endif
 %{_bindir}/scorep-online-access-registry
 %if "%{?altcc_mpi_name}" == "openmpi"
 %{_bindir}/scorep-oshcc
 %{_bindir}/scorep-oshfort
-%endif
 %endif
 %{_bindir}/scorep-info
 %{_bindir}/scorep-score
