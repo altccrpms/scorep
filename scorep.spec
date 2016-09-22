@@ -4,7 +4,7 @@
 
 Name:           %{shortname}%{?altcc_pkg_suffix}
 Version:        %{ver}
-Release:        0.1.rc1%{?dist}
+Release:        1%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 
 License:        BSD
@@ -63,7 +63,7 @@ rm -rf vendor/{opari2,otf2}
 
 
 %build
-%global configure_opts --enable-shared --disable-static --disable-silent-rules
+%global configure_opts ac_scorep_platform=linux --enable-shared --disable-static --disable-silent-rules
 %{?altcc:%global configure_opts %{configure_opts} --with-nocross-compiler-suite=%{altcc_cc_name}}
 %if !0%{?altcc_with_mpi}
 %global configure_opts  %{configure_opts} --without-mpi --without-shmem
@@ -138,6 +138,13 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
+* Tue Sep 20 2016 Orion Poplawski <orion@cora.nwra.com> - 3.0-1
+- Update to 3.0
+
+* Thu Sep 15 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.2-2
+- Rebuild for papi 5.5.0
+- Force scorep_platform to be "linux"
+
 * Tue May 24 2016 Orion Poplawski <orion@cora.nwra.com> - 2.0.2-1
 - Update to 2.0.2
 
